@@ -5,20 +5,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t travissand/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t travisand/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true travissand/react-test npm test
+  - docker run -e CI=true travisand/react-test npm test
 
 after_success:
-  - docker build -t travissand/multi-client ./client
-  - docker build -t travissand/multi-nginx ./nginx
-  - docker build -t travissand/multi-server ./server
-  - docker build -t travissand/multi-worker ./worker
+  - docker build -t travisand/multi-client ./client
+  - docker build -t travisand/multi-nginx ./nginx
+  - docker build -t travisand/multi-server ./server
+  - docker build -t travisand/multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push travissand/multi-client
-  - docker push travissand/multi-nginx
-  - docker push travissand/multi-server
-  - docker push travissand/multi-worker
+  - docker push travisand/multi-client
+  - docker push travisand/multi-nginx
+  - docker push travisand/multi-server
+  - docker push travisand/multi-worker
