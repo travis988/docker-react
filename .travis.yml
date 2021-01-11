@@ -11,14 +11,26 @@ script:
   - docker run -e CI=true travisand/react-test npm test
 
 after_success:
-  - docker build -t travisand/multi-client ./client
-  - docker build -t travisand/multi-nginx ./nginx
-  - docker build -t travisand/multi-server ./server
-  - docker build -t travisand/multi-worker ./worker
+  - docker build -t travisand/multi-client-10-14 ./client
+  - docker build -t travisand/multi-nginx-10-14 ./nginx
+  - docker build -t travisand/multi-server-10-14 ./server
+  - docker build -t travisand/multi-worker-10-14 ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push travisand/multi-client
-  - docker push travisand/multi-nginx
-  - docker push travisand/multi-server
-  - docker push travisand/multi-worker
+  - docker push travisand/multi-client-10-14
+  - docker push travisand/multi-nginx-10-14
+  - docker push travisand/multi-server-10-14
+  - docker push travisand/multi-worker-10-14
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'multi-docker'
+  env: 'MultiDocker-env'
+  bucket_name: $BUCKET_NAME
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
